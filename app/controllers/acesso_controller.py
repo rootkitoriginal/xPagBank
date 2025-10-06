@@ -1,7 +1,9 @@
 import re
+from typing import Any, Dict
+
 import httpx
-from typing import Dict, Any
-from app.schemas.acesso import AcessoRequest, AcessoResponse
+
+from app.schemas.acesso import AcessoRequest
 
 
 class AcessoController:
@@ -19,7 +21,7 @@ class AcessoController:
             True se válido, False caso contrário
         """
         # Remove caracteres não numéricos
-        cpf = re.sub(r'\D', '', cpf)
+        cpf = re.sub(r"\D", "", cpf)
 
         # Verifica se tem 11 dígitos
         if len(cpf) != 11:
@@ -54,7 +56,7 @@ class AcessoController:
             True se válido, False caso contrário
         """
         # Remove caracteres não numéricos
-        cnpj = re.sub(r'\D', '', cnpj)
+        cnpj = re.sub(r"\D", "", cnpj)
 
         # Verifica se tem 14 dígitos
         if len(cnpj) != 14:
@@ -92,7 +94,7 @@ class AcessoController:
         Returns:
             True se válido, False caso contrário
         """
-        padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        padrao = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         return bool(re.match(padrao, email))
 
     @staticmethod
@@ -110,11 +112,11 @@ class AcessoController:
         username = username.strip()
 
         # Verifica se é email
-        if '@' in username:
+        if "@" in username:
             return AcessoController.validar_email(username)
 
         # Remove caracteres não numéricos para testar CPF/CNPJ
-        apenas_numeros = re.sub(r'\D', '', username)
+        apenas_numeros = re.sub(r"\D", "", username)
 
         # Verifica se é CPF (11 dígitos)
         if len(apenas_numeros) == 11:
@@ -142,21 +144,24 @@ class AcessoController:
             return {
                 "success": False,
                 "message": "Username inválido. Forneça um CPF, CNPJ ou Email válido.",
-                "data": None
+                "data": None,
             }
 
         # Configuração da API
         url = "https://api.security.pagbank.com.br/usernames"
-        
+
         headers = {
             "accept": "application/json",
             "accept-language": "pt-BR",
             "content-type": "application/json",
             "origin": "https://acesso.pagbank.com.br",
             "referer": "https://acesso.pagbank.com.br/",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+            "user-agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+            ),
             "x-requested-with": "XMLHttpRequest",
-            "x-user-type": "primary"
+            "x-user-type": "primary",
         }
 
         payload = {"username": acesso_data.username}
@@ -164,35 +169,43 @@ class AcessoController:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(url, json=payload, headers=headers)
-                
-                print(f"\n{'='*60}")
+
+                print("\n" + "=" * 60)
                 print(f"Status Code: {response.status_code}")
-                print(f"{'='*60}")
-                print(f"Response Headers:")
+                print("=" * 60)
+                print("Response Headers:")
                 for key, value in response.headers.items():
                     print(f"  {key}: {value}")
-                print(f"{'='*60}")
-                print(f"Response Body:")
-                print(response.text[:500] if len(response.text) > 500 else response.text)
-                print(f"{'='*60}\n")
+                print("=" * 60)
+                print("Response Body:")
+                body = response.text
+                print(body[:500] if len(body) > 500 else body)
+                print("=" * 60 + "\n")
 
                 # Verifica se é bloqueio do Cloudflare
-                is_cloudflare_block = (
-                    response.status_code == 403 and 
-                    ('cloudflare' in response.text.lower() or 
-                     'cf-ray' in response.headers.get('server', '').lower() or
-                     response.headers.get('server', '').lower() == 'cloudflare')
+                is_cloudflare_block = response.status_code == 403 and (
+                    "cloudflare" in response.text.lower()
+                    or "cf-ray" in response.headers.get("server", "").lower()
+                    or response.headers.get("server", "").lower() == "cloudflare"
                 )
 
                 if is_cloudflare_block:
+                    msg = (
+                        "Bloqueado pelo Cloudflare. A API do PagBank "
+                        "está protegida e requer autenticação adicional."
+                    )
+                    detail = (
+                        "A requisição foi bloqueada pelo sistema de "
+                        "proteção Cloudflare do PagBank"
+                    )
                     return {
                         "success": False,
                         "status_code": response.status_code,
-                        "message": "Bloqueado pelo Cloudflare. A API do PagBank está protegida e requer autenticação adicional (cookies, tokens, etc.)",
+                        "message": msg,
                         "data": {
                             "error": "cloudflare_protection",
-                            "detail": "A requisição foi bloqueada pelo sistema de proteção Cloudflare do PagBank"
-                        }
+                            "detail": detail,
+                        },
                     }
 
                 # Tenta parsear o JSON
@@ -201,22 +214,24 @@ class AcessoController:
                 except Exception:
                     response_data = {"raw": response.text}
 
+                success = response.status_code == 200
+                msg = "Requisição realizada com sucesso" if success else "Erro na requisição"
                 return {
-                    "success": response.status_code == 200,
+                    "success": success,
                     "status_code": response.status_code,
-                    "message": "Requisição realizada com sucesso" if response.status_code == 200 else "Erro na requisição",
-                    "data": response_data
+                    "message": msg,
+                    "data": response_data,
                 }
 
         except httpx.TimeoutException:
             return {
                 "success": False,
                 "message": "Timeout ao conectar com a API do PagBank",
-                "data": None
+                "data": None,
             }
         except Exception as e:
             return {
                 "success": False,
                 "message": f"Erro ao fazer requisição: {str(e)}",
-                "data": None
+                "data": None,
             }
