@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1.api import api_router
+from app.api.v1.api import api_router as api_router_v1
+from app.api.v2.api import api_router as api_router_v2
 from app.core import settings
 
 # Create FastAPI application
@@ -22,8 +23,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include API v1 router
-app.include_router(api_router, prefix=settings.API_V1_PREFIX)
+# Include API routers
+app.include_router(api_router_v1, prefix=settings.API_V1_PREFIX)
+app.include_router(api_router_v2, prefix="/api/v2")
 
 
 @app.get("/")
@@ -48,7 +50,8 @@ if __name__ == "__main__":
     print("\n📚 Documentação:")
     print("   • Swagger UI: http://localhost:8874/docs")
     print("   • ReDoc:      http://localhost:8874/redoc")
-    print("\n🔗 Endpoints disponíveis:")
+
+    print("\n🔗 API v1 Endpoints (HTTP Client):")
     print(f"   • GET  {settings.API_V1_PREFIX}/health          - Health check")
     print(f"   • POST {settings.API_V1_PREFIX}/usuario         - Criar usuário")
     print(f"   • POST {settings.API_V1_PREFIX}/acesso          - Validar CPF/CNPJ/Email")
@@ -57,12 +60,22 @@ if __name__ == "__main__":
     print(f"   • GET  {settings.API_V1_PREFIX}/saldo           - Consultar saldo")
     print(f"   • POST {settings.API_V1_PREFIX}/pix             - Realizar PIX")
     print(f"   • POST {settings.API_V1_PREFIX}/confirma_pix    - Confirmar PIX")
-    print("\n💡 Exemplo de uso - Endpoint /acesso:")
+
+    print("\n� API v2 Endpoints (Browser Automation):")
+    print("   • POST /api/v2/acesso          - Validar CPF/CNPJ/Email")
+
+    print("\n💡 Exemplo de uso - V1 (HTTP):")
     print("   curl -X POST http://localhost:8874/api/v1/acesso \\")
     print("     -H 'Content-Type: application/json' \\")
     print('     -d \'{"username": "123.456.789-09"}\'')
-    print("\n   Aceita: CPF, CNPJ ou Email válidos")
-    print("   Retorna: {success: true/false, message: ..., data: ...}")
+
+    print("\n💡 Exemplo de uso - V2 (Browser):")
+    print("   curl -X POST http://localhost:8874/api/v2/acesso \\")
+    print("     -H 'Content-Type: application/json' \\")
+    print('     -d \'{"username": "usuario@example.com"}\'')
+
+    print("\n   V1: Usa HTTP client (httpx) - Rápido mas pode ter bloqueios")
+    print("   V2: Usa navegador (Playwright) - Mais lento mas simula usuário real")
     print("\n" + "=" * 70 + "\n")
 
     uvicorn.run(app, host="0.0.0.0", port=8874)
