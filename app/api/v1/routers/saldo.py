@@ -1,33 +1,34 @@
 from fastapi import APIRouter, Header
-from app.schemas.saldo import SaldoResponse
+
 from app.controllers.saldo_controller import SaldoController
+from app.schemas.saldo import SaldoResponse
 
 router = APIRouter(tags=["saldo"])
 
 
 @router.get(
-    "/saldo", 
+    "/saldo",
     response_model=SaldoResponse,
     summary="Consultar saldo",
     description="""
     Consulta o saldo disponível, bloqueado e total do usuário.
-    
+
     ## Headers obrigatórios:
     - **X-Usuario-Id**: ID do usuário (número inteiro)
-    
+
     ## Retorna:
     - **saldo_disponivel**: Valor disponível para uso imediato
     - **saldo_bloqueado**: Valor bloqueado/reservado (ex: transações pendentes)
     - **saldo_total**: Soma do disponível + bloqueado
-    
+
     ## Exemplos de requisição:
-    
+
     **cURL:**
     ```bash
     curl -X GET "http://localhost:8000/api/v1/saldo" \\
       -H "X-Usuario-Id: 1"
     ```
-    
+
     **Python:**
     ```python
     import requests
@@ -37,7 +38,7 @@ router = APIRouter(tags=["saldo"])
     result = response.json()
     print(f"Saldo: R$ {result['saldo_disponivel']}")
     ```
-    
+
     **Node.js:**
     ```javascript
     fetch('http://localhost:8000/api/v1/saldo', {
@@ -45,20 +46,22 @@ router = APIRouter(tags=["saldo"])
     }).then(r => r.json()).then(console.log);
     ```
     """,
-    response_description="Informações de saldo do usuário"
+    response_description="Informações de saldo do usuário",
 )
-async def consultar_saldo(usuario_id: int = Header(..., alias="X-Usuario-Id", description="ID do usuário (via header)")):
+async def consultar_saldo(
+    usuario_id: int = Header(..., alias="X-Usuario-Id", description="ID do usuário (via header)")
+):
     """
     Consultar saldo do usuário.
-    
+
     **Headers obrigatórios:**
     - **X-Usuario-Id**: ID do usuário (número inteiro)
-    
+
     **Retorna:**
     - **saldo_disponivel**: Valor disponível para uso imediato
     - **saldo_bloqueado**: Valor bloqueado/reservado (ex: transações pendentes)
     - **saldo_total**: Soma do disponível + bloqueado
-    
+
     **Exemplo de chamada:**
     ```bash
     curl -X GET "http://localhost:8000/api/v1/saldo" \\

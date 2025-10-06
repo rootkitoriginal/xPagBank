@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core import settings
+
 from app.api.v1.api import api_router
+from app.core import settings
 
 # Create FastAPI application
 app = FastAPI(
@@ -9,7 +10,7 @@ app = FastAPI(
     version=settings.APP_VERSION,
     description="xPagBank REST API - Sistema de pagamentos e transações",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Configure CORS
@@ -32,10 +33,11 @@ async def root():
         "message": "Welcome to xPagBank API",
         "version": settings.APP_VERSION,
         "docs": "/docs",
-        "redoc": "/redoc"
+        "redoc": "/redoc",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

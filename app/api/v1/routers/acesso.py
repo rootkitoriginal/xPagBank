@@ -1,29 +1,30 @@
 from fastapi import APIRouter
-from app.schemas.acesso import AcessoRequest, AcessoResponse
+
 from app.controllers.acesso_controller import AcessoController
+from app.schemas.acesso import AcessoRequest, AcessoResponse
 
 router = APIRouter(tags=["acesso"])
 
 
 @router.post(
-    "/acesso", 
+    "/acesso",
     response_model=AcessoResponse,
     summary="Login / Autenticação",
     description="""
     Autentica o usuário e retorna um token de acesso.
-    
+
     ## Campos obrigatórios:
     - **email**: Email cadastrado do usuário
     - **senha**: Senha do usuário
-    
+
     ## Retorna:
     - **access_token**: Token JWT para autenticação nas demais rotas
     - **token_type**: Tipo do token (bearer)
     - **usuario_id**: ID do usuário autenticado
     - **nome**: Nome do usuário
-    
+
     ## Exemplos de requisição:
-    
+
     **cURL:**
     ```bash
     curl -X POST "http://localhost:8000/api/v1/acesso" \\
@@ -33,7 +34,7 @@ router = APIRouter(tags=["acesso"])
         "senha": "senha123"
       }'
     ```
-    
+
     **Python:**
     ```python
     import requests
@@ -43,7 +44,7 @@ router = APIRouter(tags=["acesso"])
     token = response.json()['access_token']
     print(f"Token: {token}")
     ```
-    
+
     **Node.js:**
     ```javascript
     fetch('http://localhost:8000/api/v1/acesso', {
@@ -55,28 +56,28 @@ router = APIRouter(tags=["acesso"])
       })
     }).then(r => r.json()).then(d => console.log('Token:', d.access_token));
     ```
-    
+
     ## Exemplo de uso do token:
     ```
     Authorization: Bearer <access_token>
     ```
     """,
-    response_description="Token de acesso e informações do usuário"
+    response_description="Token de acesso e informações do usuário",
 )
 async def fazer_login(acesso: AcessoRequest):
     """
     Autenticar usuário e gerar token de acesso.
-    
+
     **Campos obrigatórios:**
     - **email**: Email cadastrado do usuário
     - **senha**: Senha do usuário
-    
+
     **Retorna:**
     - **access_token**: Token JWT para autenticação nas demais rotas
     - **token_type**: Tipo do token (bearer)
     - **usuario_id**: ID do usuário autenticado
     - **nome**: Nome do usuário
-    
+
     **Exemplo de uso do token:**
     ```
     Authorization: Bearer <access_token>

@@ -546,7 +546,7 @@ async function fluxoCompleto() {
       })
     }).then(r => r.json());
     console.log('✓ PIX confirmado:', confirma.mensagem);
-    
+
   } catch (error) {
     console.error('Erro:', error);
   }

@@ -1,0 +1,62 @@
+# Pre-commit hooks configuration
+# See https://pre-commit.com for more information
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Previne commits de arquivos grandes
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+
+      # Verifica sintaxe YAML
+      - id: check-yaml
+
+      # Verifica sintaxe JSON
+      - id: check-json
+
+      # Verifica se há conflitos de merge
+      - id: check-merge-conflict
+
+      # Remove espaços em branco no final das linhas
+      - id: trailing-whitespace
+
+      # Garante que arquivos terminam com newline
+      - id: end-of-file-fixer
+
+      # Verifica sintaxe Python
+      - id: check-ast
+
+      # Verifica case conflicts em nomes de arquivos
+      - id: check-case-conflict
+
+  # Black - Formatação de código Python
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        language_version: python3.10
+        args: ['--line-length=100']
+
+  # Flake8 - Linting Python
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        args: ['--max-line-length=100', '--extend-ignore=E203,W503']
+
+  # isort - Organiza imports
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ['--profile=black', '--line-length=100']
+
+  # mypy - Type checking (opcional, pode ser lento)
+  # Descomente se quiser type checking no pre-commit
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.8.0
+  #   hooks:
+  #     - id: mypy
+  #       additional_dependencies: [types-all]
+  #       args: ['--ignore-missing-imports', '--no-strict-optional']

@@ -1,6 +1,7 @@
 from fastapi import APIRouter
-from app.schemas.confirma_pix import ConfirmaPixRequest, ConfirmaPixResponse
+
 from app.controllers.confirma_pix_controller import ConfirmaPixController
+from app.schemas.confirma_pix import ConfirmaPixRequest, ConfirmaPixResponse
 
 router = APIRouter(tags=["pix"])
 
@@ -9,10 +10,10 @@ router = APIRouter(tags=["pix"])
 async def confirmar_pix(confirmacao: ConfirmaPixRequest):
     """
     Confirm a PIX transaction
-    
+
     Args:
         confirmacao: Confirmation data
-        
+
     Returns:
         ConfirmaPixResponse: Confirmation result
     """

@@ -1,13 +1,14 @@
 from fastapi import APIRouter
+
 from app.api.v1.routers import (
-    health,
-    usuario,
     acesso,
-    qrcode,
+    confirma_pix,
     confirmaqrcode,
-    saldo,
+    health,
     pix,
-    confirma_pix
+    qrcode,
+    saldo,
+    usuario,
 )
 
 api_router = APIRouter()

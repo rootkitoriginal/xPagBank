@@ -1,6 +1,7 @@
 from fastapi import APIRouter, status
-from app.schemas.qrcode import QRCodeRequest, QRCodeResponse
+
 from app.controllers.qrcode_controller import QRCodeController
+from app.schemas.qrcode import QRCodeRequest, QRCodeResponse
 
 router = APIRouter(tags=["qrcode"])
 
@@ -9,10 +10,10 @@ router = APIRouter(tags=["qrcode"])
 async def gerar_qrcode(qrcode: QRCodeRequest):
     """
     Generate a QR Code for payment
-    
+
     Args:
         qrcode: QR Code generation data
-        
+
     Returns:
         QRCodeResponse: Generated QR Code information
     """

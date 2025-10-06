@@ -1,19 +1,19 @@
-from app.schemas.usuario import UsuarioCreate, UsuarioResponse
-from typing import Dict
 from datetime import datetime
+
+from app.schemas.usuario import UsuarioCreate, UsuarioResponse
 
 
 class UsuarioController:
     """Controller for user operations"""
-    
+
     @staticmethod
     def criar_usuario(usuario_data: UsuarioCreate) -> UsuarioResponse:
         """
         Create a new user
-        
+
         Args:
             usuario_data: User creation data
-            
+
         Returns:
             UsuarioResponse: Created user data
         """
@@ -26,5 +26,5 @@ class UsuarioController:
             cpf=usuario_data.cpf,
             telefone=usuario_data.telefone,
             ativo=True,
-            data_criacao=datetime.now()
+            data_criacao=datetime.now(),
         )

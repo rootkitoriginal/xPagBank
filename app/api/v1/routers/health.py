@@ -1,6 +1,7 @@
 from fastapi import APIRouter
-from app.schemas.health import HealthResponse
+
 from app.controllers.health_controller import HealthController
+from app.schemas.health import HealthResponse
 
 router = APIRouter(tags=["health"])
 
@@ -9,7 +10,7 @@ router = APIRouter(tags=["health"])
 async def health_check():
     """
     Health check endpoint
-    
+
     Returns:
         HealthResponse: API health status
     """
