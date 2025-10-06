@@ -148,28 +148,74 @@ class AcessoController:
 
         # Inicializa o cliente HTTP
         client = PagBankHttpClient(
-            base_url="https://api.security.pagbank.com.br",
+            base_url="https://acesso.pagbank.com.br",
             timeout=30.0,
         )
 
-        # Headers customizados para esta requisição
-        custom_headers = {
-            "origin": "https://acesso.pagbank.com.br",
-            "referer": "https://acesso.pagbank.com.br/",
-            "x-user-type": "primary",
-        }
-
-        payload = {"username": acesso_data.username}
-
         try:
+            # PASSO 1: Acessa a página de login para obter cookies de sessão
+            print("\n" + "=" * 60)
+            print("PASSO 1: Obtendo cookies de sessão...")
+            print("=" * 60)
+
+            initial_headers = {
+                "accept": (
+                    "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                    "image/avif,image/webp,image/apng,*/*;q=0.8,"
+                    "application/signed-exchange;v=b3;q=0.7"
+                ),
+                "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+                "cache-control": "max-age=0",
+                "referer": "https://pagbank.com.br/",
+                "sec-ch-ua": (
+                    '"Google Chrome";v="141", "Not?A_Brand";v="8", ' '"Chromium";v="141"'
+                ),
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": '"Linux"',
+                "sec-fetch-dest": "document",
+                "sec-fetch-mode": "navigate",
+                "sec-fetch-site": "same-origin",
+                "sec-fetch-user": "?1",
+                "upgrade-insecure-requests": "1",
+            }
+
+            # Acessa a página inicial para obter cookies
+            initial_response = await client.get(
+                path="/",
+                headers=initial_headers,
+                use_cookies=True,
+            )
+
+            print(f"Status: {initial_response.status_code}")
+            print(f"Cookies obtidos: {len(client.get_cookies())} cookies")
+            for cookie_name in client.get_cookies().keys():
+                print(f"  - {cookie_name}")
+            print("=" * 60 + "\n")
+
+            # PASSO 2: Faz a requisição para a API usando os cookies
+            print("=" * 60)
+            print("PASSO 2: Validando username na API...")
+            print("=" * 60)
+
+            # Muda a base URL para a API
+            client.base_url = "https://api.security.pagbank.com.br"
+
+            # Headers customizados para a API
+            api_headers = {
+                "origin": "https://acesso.pagbank.com.br",
+                "referer": "https://acesso.pagbank.com.br/",
+                "x-user-type": "primary",
+            }
+
+            payload = {"username": acesso_data.username}
+
             response = await client.post(
                 path="/usernames",
                 json=payload,
-                headers=custom_headers,
-                use_cookies=True,  # Vai reutilizar cookies se houver
+                headers=api_headers,
+                use_cookies=True,  # Reutiliza os cookies obtidos no passo 1
             )
 
-            print("\n" + "=" * 60)
             print(f"Status Code: {response.status_code}")
             print("=" * 60)
             print("Response Headers:")
@@ -180,7 +226,7 @@ class AcessoController:
             body = response.text
             print(body[:500] if len(body) > 500 else body)
             print("=" * 60)
-            print("Cookies:")
+            print("Cookies finais:")
             print(client.get_cookies())
             print("=" * 60 + "\n")
 
