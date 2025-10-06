@@ -40,4 +40,29 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
 
+    # Print startup information
+    print("\n" + "=" * 70)
+    print(f"🚀 {settings.APP_NAME} v{settings.APP_VERSION}")
+    print("=" * 70)
+    print("\n📡 Servidor iniciando em: http://0.0.0.0:8000")
+    print("\n📚 Documentação:")
+    print("   • Swagger UI: http://localhost:8000/docs")
+    print("   • ReDoc:      http://localhost:8000/redoc")
+    print("\n🔗 Endpoints disponíveis:")
+    print(f"   • GET  {settings.API_V1_PREFIX}/health          - Health check")
+    print(f"   • POST {settings.API_V1_PREFIX}/usuario         - Criar usuário")
+    print(f"   • POST {settings.API_V1_PREFIX}/acesso          - Validar CPF/CNPJ/Email")
+    print(f"   • POST {settings.API_V1_PREFIX}/qrcode          - Gerar QR Code")
+    print(f"   • POST {settings.API_V1_PREFIX}/confirmaqrcode  - Confirmar QR Code")
+    print(f"   • GET  {settings.API_V1_PREFIX}/saldo           - Consultar saldo")
+    print(f"   • POST {settings.API_V1_PREFIX}/pix             - Realizar PIX")
+    print(f"   • POST {settings.API_V1_PREFIX}/confirma_pix    - Confirmar PIX")
+    print("\n💡 Exemplo de uso - Endpoint /acesso:")
+    print("   curl -X POST http://localhost:8000/api/v1/acesso \\")
+    print("     -H 'Content-Type: application/json' \\")
+    print('     -d \'{"username": "123.456.789-09"}\'')
+    print("\n   Aceita: CPF, CNPJ ou Email válidos")
+    print("   Retorna: {success: true/false, message: ..., data: ...}")
+    print("\n" + "=" * 70 + "\n")
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

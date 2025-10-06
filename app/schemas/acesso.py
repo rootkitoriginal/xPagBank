@@ -1,15 +1,12 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AcessoRequest(BaseModel):
     """Schema for access/login request"""
 
-    email: EmailStr = Field(..., description="Email do usuário")
-    senha: str = Field(..., description="Senha do usuário")
+    username: str = Field(..., description="CPF, CNPJ ou Email do usuário")
 
-    model_config = ConfigDict(
-        json_schema_extra={"example": {"email": "joao.silva@email.com", "senha": "senha123"}}
-    )
+    model_config = ConfigDict(json_schema_extra={"example": {"username": "123.456.789-00"}})
 
 
 class AcessoResponse(BaseModel):

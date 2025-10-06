@@ -16,6 +16,17 @@ xPagBank/
 │   ├── schemas/                # Pydantic schemas
 │   ├── services/               # External services
 │   └── core/                   # Configuration
+├── docs/                       # 📚 Documentação completa
+│   ├── API_EXAMPLES.md
+│   ├── SETUP_GUIDE.md
+│   ├── GIT_WORKFLOW.md
+│   ├── PRE_COMMIT_GUIDE.md
+│   └── DEPENDABOT_GUIDE.md
+├── tests/                      # 🧪 Testes automatizados
+│   ├── test_validacao.py
+│   ├── test_api_acesso.sh
+│   ├── test_health.py
+│   └── test_usuario.py
 ├── main.py                     # Application entry point
 └── requirements.txt            # Python dependencies
 ```
@@ -58,11 +69,20 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ## Documentação
 
+📚 **Documentação completa disponível em [`docs/`](./docs/)**
+
 Após iniciar o servidor, acesse:
 
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
-- **Exemplos de código**: Veja o arquivo [API_EXAMPLES.md](API_EXAMPLES.md) com exemplos em cURL, Python e Node.js
+
+### Guias disponíveis:
+
+- 🚀 [**SETUP_GUIDE.md**](./docs/SETUP_GUIDE.md) - Guia de instalação completo
+- 🔌 [**API_EXAMPLES.md**](./docs/API_EXAMPLES.md) - Exemplos práticos de uso da API
+- 🔄 [**GIT_WORKFLOW.md**](./docs/GIT_WORKFLOW.md) - Workflow Git e boas práticas
+- ✅ [**PRE_COMMIT_GUIDE.md**](./docs/PRE_COMMIT_GUIDE.md) - Configuração do pre-commit
+- 🤖 [**DEPENDABOT_GUIDE.md**](./docs/DEPENDABOT_GUIDE.md) - Configuração do Dependabot
 
 ## Configuração
 
