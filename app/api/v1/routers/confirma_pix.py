@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.controllers.confirma_pix_controller import ConfirmaPixController
+from app.controllers.v1.confirma_pix_controller import ConfirmaPixController
 from app.schemas.confirma_pix import ConfirmaPixRequest, ConfirmaPixResponse
 
 router = APIRouter(tags=["pix"])

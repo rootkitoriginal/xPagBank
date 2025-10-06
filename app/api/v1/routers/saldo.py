@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header
 
-from app.controllers.saldo_controller import SaldoController
+from app.controllers.v1.saldo_controller import SaldoController
 from app.schemas.saldo import SaldoResponse
 
 router = APIRouter(tags=["saldo"])

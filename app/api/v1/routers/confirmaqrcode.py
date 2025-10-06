@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.controllers.confirma_qrcode_controller import ConfirmaQRCodeController
+from app.controllers.v1.confirma_qrcode_controller import ConfirmaQRCodeController
 from app.schemas.confirma_qrcode import ConfirmaQRCodeRequest, ConfirmaQRCodeResponse
 
 router = APIRouter(tags=["qrcode"])

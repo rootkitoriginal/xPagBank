@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from app.controllers.pix_controller import PixController
+from app.controllers.v1.pix_controller import PixController
 from app.schemas.pix import PixRequest, PixResponse
 
 router = APIRouter(tags=["pix"])

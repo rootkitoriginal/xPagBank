@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from app.controllers.usuario_controller import UsuarioController
+from app.controllers.v1.usuario_controller import UsuarioController
 from app.schemas.usuario import UsuarioCreate, UsuarioResponse
 
 router = APIRouter(tags=["usuario"])

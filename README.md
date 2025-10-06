@@ -2,33 +2,45 @@
 
 Sistema REST API para pagamentos e transações bancárias usando FastAPI.
 
+## 🎯 Duas Versões Disponíveis
+
+| Versão | Tecnologia | Velocidade | Robustez | Recomendado para |
+|--------|-----------|-----------|----------|------------------|
+| **V1** | HTTP Client (httpx) | ⚡ Muito rápida | 🔸 Pode ser bloqueada | Velocidade e eficiência |
+| **V2** | Browser Automation (Playwright) | 🐢 Mais lenta | ✅ Simula usuário real | Bypass de proteções |
+
 ## Estrutura do Projeto
 
 ```
 xPagBank/
 ├── app/
 │   ├── api/
-│   │   └── v1/
-│   │       ├── routers/        # Endpoints (Views)
-│   │       └── api.py          # Router aggregator
-│   ├── controllers/            # Business logic (Controllers)
+│   │   ├── v1/                 # API V1 (HTTP Client)
+│   │   │   └── routers/        # Endpoints V1
+│   │   └── v2/                 # API V2 (Browser Automation)
+│   │       └── routers/        # Endpoints V2
+│   ├── controllers/
+│   │   ├── v1/                 # Controllers V1 (HTTP)
+│   │   ├── v2/                 # Controllers V2 (Browser)
+│   │   └── health_controller.py # Compartilhado
+│   ├── services/
+│   │   ├── http_client.py      # 🌐 Cliente HTTP V1
+│   │   └── playwright_service.py # 🎭 Browser Automation V2
+│   ├── utils/
+│   │   └── response_parser.py  # 🔧 Parser compartilhado
 │   ├── models/                 # Database models
 │   ├── schemas/                # Pydantic schemas
-│   ├── services/               # External services & HTTP client
-│   │   └── http_client.py     # 🌐 Reusable HTTP client
 │   └── core/                   # Configuration
 ├── docs/                       # 📚 Documentação completa
-│   ├── API_EXAMPLES.md
+│   ├── README.md               # 📖 Índice da documentação
+│   ├── API_EXAMPLES.md         # Exemplos V1
+│   ├── API_V2_GUIDE.md         # 🎭 Guia completo V2
 │   ├── HTTP_CLIENT_EXAMPLES.md # 🌐 Guia do HTTP Client
 │   ├── SETUP_GUIDE.md
 │   ├── GIT_WORKFLOW.md
 │   ├── PRE_COMMIT_GUIDE.md
 │   └── DEPENDABOT_GUIDE.md
 ├── tests/                      # 🧪 Testes automatizados
-│   ├── test_validacao.py
-│   ├── test_api_acesso.sh
-│   ├── test_health.py
-│   └── test_usuario.py
 ├── main.py                     # Application entry point
 └── requirements.txt            # Python dependencies
 ```
@@ -36,10 +48,12 @@ xPagBank/
 ## Arquitetura MVC
 
 - **Models**: Definições de dados e modelos de banco de dados
-- **Views**: Endpoints da API (routers)
-- **Controllers**: Lógica de negócio
+- **Views**: Endpoints da API (routers) - v1 e v2
+- **Controllers**: Lógica de negócio - v1 (HTTP) e v2 (Browser)
 
-## API Endpoints (v1)
+## API Endpoints
+
+### 🔵 V1 - HTTP Client (httpx)
 
 Todos os endpoints estão sob o prefixo `/api/v1/`:
 
@@ -52,7 +66,17 @@ Todos os endpoints estão sob o prefixo `/api/v1/`:
 - `POST /api/v1/pix` - Iniciar transação PIX
 - `POST /api/v1/confirma_pix` - Confirmar transação PIX
 
+### 🟢 V2 - Browser Automation (Playwright)
+
+Todos os endpoints estão sob o prefixo `/api/v2/`:
+
+- `POST /api/v2/acesso` - Autenticação/Login via navegador real
+
+> 💡 **Dica**: Use V1 para velocidade, V2 para bypass de proteções Cloudflare
+
 ## Instalação
+
+### Opção 1: V1 apenas (HTTP Client)
 
 1. Instalar dependências:
 ```bash

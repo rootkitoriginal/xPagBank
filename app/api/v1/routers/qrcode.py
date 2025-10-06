@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from app.controllers.qrcode_controller import QRCodeController
+from app.controllers.v1.qrcode_controller import QRCodeController
 from app.schemas.qrcode import QRCodeRequest, QRCodeResponse
 
 router = APIRouter(tags=["qrcode"])

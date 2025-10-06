@@ -9,7 +9,7 @@ from app.services.playwright_service import PlaywrightService
 from app.utils.response_parser import ResponseParser
 
 
-class AcessoControllerV2:
+class AcessoController:
     """Controller v2 using browser automation"""
 
     @staticmethod
@@ -116,18 +116,18 @@ class AcessoControllerV2:
 
         # Verifica se é email
         if "@" in username:
-            return AcessoControllerV2.validar_email(username)
+            return AcessoController.validar_email(username)
 
         # Remove caracteres não numéricos para testar CPF/CNPJ
         apenas_numeros = re.sub(r"\D", "", username)
 
         # Verifica se é CPF (11 dígitos)
         if len(apenas_numeros) == 11:
-            return AcessoControllerV2.validar_cpf(username)
+            return AcessoController.validar_cpf(username)
 
         # Verifica se é CNPJ (14 dígitos)
         if len(apenas_numeros) == 14:
-            return AcessoControllerV2.validar_cnpj(username)
+            return AcessoController.validar_cnpj(username)
 
         return False
 
@@ -143,7 +143,7 @@ class AcessoControllerV2:
             Dict com a resposta normalizada
         """
         # Valida o username
-        if not AcessoControllerV2.validar_username(acesso_data.username):
+        if not AcessoController.validar_username(acesso_data.username):
             return ResponseParser.validation_error(
                 "Username inválido. Forneça um CPF, CNPJ ou Email válido."
             )

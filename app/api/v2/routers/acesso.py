@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 from fastapi import APIRouter
 
-from app.controllers.acesso_controller_v2 import AcessoControllerV2
+from app.controllers.v2.acesso_controller import AcessoController as AcessoControllerV2
 from app.schemas.acesso import AcessoRequest
 
 router = APIRouter()
