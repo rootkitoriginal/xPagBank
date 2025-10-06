@@ -25,14 +25,14 @@ router = APIRouter(tags=["saldo"])
 
     **cURL:**
     ```bash
-    curl -X GET "http://localhost:8000/api/v1/saldo" \\
+    curl -X GET "http://localhost:8874/api/v1/saldo" \\
       -H "X-Usuario-Id: 1"
     ```
 
     **Python:**
     ```python
     import requests
-    url = "http://localhost:8000/api/v1/saldo"
+    url = "http://localhost:8874/api/v1/saldo"
     headers = {"X-Usuario-Id": "1"}
     response = requests.get(url, headers=headers)
     result = response.json()
@@ -41,7 +41,7 @@ router = APIRouter(tags=["saldo"])
 
     **Node.js:**
     ```javascript
-    fetch('http://localhost:8000/api/v1/saldo', {
+    fetch('http://localhost:8874/api/v1/saldo', {
       headers: {'X-Usuario-Id': '1'}
     }).then(r => r.json()).then(console.log);
     ```
@@ -64,7 +64,7 @@ async def consultar_saldo(
 
     **Exemplo de chamada:**
     ```bash
-    curl -X GET "http://localhost:8000/api/v1/saldo" \\
+    curl -X GET "http://localhost:8874/api/v1/saldo" \\
       -H "X-Usuario-Id: 1"
     ```
     """

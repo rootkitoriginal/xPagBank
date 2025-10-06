@@ -1,9 +1,8 @@
 import re
 from typing import Any, Dict
 
-import httpx
-
 from app.schemas.acesso import AcessoRequest
+from app.services.http_client import PagBankHttpClient
 
 
 class AcessoController:
@@ -147,89 +146,93 @@ class AcessoController:
                 "data": None,
             }
 
-        # Configuração da API
-        url = "https://api.security.pagbank.com.br/usernames"
+        # Inicializa o cliente HTTP
+        client = PagBankHttpClient(
+            base_url="https://api.security.pagbank.com.br",
+            timeout=30.0,
+        )
 
-        headers = {
-            "accept": "application/json",
-            "accept-language": "pt-BR",
-            "content-type": "application/json",
+        # Headers customizados para esta requisição
+        custom_headers = {
             "origin": "https://acesso.pagbank.com.br",
             "referer": "https://acesso.pagbank.com.br/",
-            "user-agent": (
-                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                "(KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
-            ),
-            "x-requested-with": "XMLHttpRequest",
             "x-user-type": "primary",
         }
 
         payload = {"username": acesso_data.username}
 
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                response = await client.post(url, json=payload, headers=headers)
+            response = await client.post(
+                path="/usernames",
+                json=payload,
+                headers=custom_headers,
+                use_cookies=True,  # Vai reutilizar cookies se houver
+            )
 
-                print("\n" + "=" * 60)
-                print(f"Status Code: {response.status_code}")
-                print("=" * 60)
-                print("Response Headers:")
-                for key, value in response.headers.items():
-                    print(f"  {key}: {value}")
-                print("=" * 60)
-                print("Response Body:")
-                body = response.text
-                print(body[:500] if len(body) > 500 else body)
-                print("=" * 60 + "\n")
+            print("\n" + "=" * 60)
+            print(f"Status Code: {response.status_code}")
+            print("=" * 60)
+            print("Response Headers:")
+            for key, value in response.headers.items():
+                print(f"  {key}: {value}")
+            print("=" * 60)
+            print("Response Body:")
+            body = response.text
+            print(body[:500] if len(body) > 500 else body)
+            print("=" * 60)
+            print("Cookies:")
+            print(client.get_cookies())
+            print("=" * 60 + "\n")
 
-                # Verifica se é bloqueio do Cloudflare
-                is_cloudflare_block = response.status_code == 403 and (
-                    "cloudflare" in response.text.lower()
-                    or "cf-ray" in response.headers.get("server", "").lower()
-                    or response.headers.get("server", "").lower() == "cloudflare"
+            # Verifica se é bloqueio do Cloudflare
+            is_cloudflare_block = response.status_code == 403 and (
+                "cloudflare" in response.text.lower()
+                or "cf-ray" in response.headers.get("server", "").lower()
+                or response.headers.get("server", "").lower() == "cloudflare"
+            )
+
+            if is_cloudflare_block:
+                msg = (
+                    "Bloqueado pelo Cloudflare. A API do PagBank "
+                    "está protegida e requer autenticação adicional."
                 )
-
-                if is_cloudflare_block:
-                    msg = (
-                        "Bloqueado pelo Cloudflare. A API do PagBank "
-                        "está protegida e requer autenticação adicional."
-                    )
-                    detail = (
-                        "A requisição foi bloqueada pelo sistema de "
-                        "proteção Cloudflare do PagBank"
-                    )
-                    return {
-                        "success": False,
-                        "status_code": response.status_code,
-                        "message": msg,
-                        "data": {
-                            "error": "cloudflare_protection",
-                            "detail": detail,
-                        },
-                    }
-
-                # Tenta parsear o JSON
-                try:
-                    response_data = response.json()
-                except Exception:
-                    response_data = {"raw": response.text}
-
-                success = response.status_code == 200
-                msg = "Requisição realizada com sucesso" if success else "Erro na requisição"
+                detail = (
+                    "A requisição foi bloqueada pelo sistema de " "proteção Cloudflare do PagBank"
+                )
                 return {
-                    "success": success,
+                    "success": False,
                     "status_code": response.status_code,
                     "message": msg,
-                    "data": response_data,
+                    "data": {
+                        "error": "cloudflare_protection",
+                        "detail": detail,
+                    },
                 }
 
-        except httpx.TimeoutException:
+            # Tenta parsear o JSON
+            try:
+                response_data = response.json()
+            except Exception:
+                response_data = {"raw": response.text}
+
+            success = response.status_code == 200
+            msg = "Requisição realizada com sucesso" if success else "Erro na requisição"
             return {
-                "success": False,
-                "message": "Timeout ao conectar com a API do PagBank",
-                "data": None,
+                "success": success,
+                "status_code": response.status_code,
+                "message": msg,
+                "data": response_data,
+                "cookies": client.get_cookies(),  # Retorna cookies para reutilização
             }
+
         except Exception as e:
+            error_type = type(e).__name__
+            if "timeout" in error_type.lower() or "timeout" in str(e).lower():
+                return {
+                    "success": False,
+                    "message": "Timeout ao conectar com a API do PagBank",
+                    "data": None,
+                }
             return {
                 "success": False,
                 "message": f"Erro ao fazer requisição: {str(e)}",

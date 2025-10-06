@@ -25,7 +25,7 @@ router = APIRouter(tags=["pix"])
 
     **cURL:**
     ```bash
-    curl -X POST "http://localhost:8000/api/v1/pix" \\
+    curl -X POST "http://localhost:8874/api/v1/pix" \\
       -H "Content-Type: application/json" \\
       -d '{
         "chave_destino": "maria.silva@email.com",
@@ -37,7 +37,7 @@ router = APIRouter(tags=["pix"])
     **Python:**
     ```python
     import requests
-    url = "http://localhost:8000/api/v1/pix"
+    url = "http://localhost:8874/api/v1/pix"
     data = {
         "chave_destino": "maria.silva@email.com",
         "valor": 250.00,
@@ -51,7 +51,7 @@ router = APIRouter(tags=["pix"])
 
     **Node.js:**
     ```javascript
-    fetch('http://localhost:8000/api/v1/pix', {
+    fetch('http://localhost:8874/api/v1/pix', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

@@ -14,10 +14,12 @@ xPagBank/
 │   ├── controllers/            # Business logic (Controllers)
 │   ├── models/                 # Database models
 │   ├── schemas/                # Pydantic schemas
-│   ├── services/               # External services
+│   ├── services/               # External services & HTTP client
+│   │   └── http_client.py     # 🌐 Reusable HTTP client
 │   └── core/                   # Configuration
 ├── docs/                       # 📚 Documentação completa
 │   ├── API_EXAMPLES.md
+│   ├── HTTP_CLIENT_EXAMPLES.md # 🌐 Guia do HTTP Client
 │   ├── SETUP_GUIDE.md
 │   ├── GIT_WORKFLOW.md
 │   ├── PRE_COMMIT_GUIDE.md
@@ -64,7 +66,7 @@ python main.py
 
 Ou com uvicorn diretamente:
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8874
 ```
 
 ## Documentação
@@ -73,16 +75,49 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 Após iniciar o servidor, acesse:
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: http://localhost:8874/docs
+- **ReDoc**: http://localhost:8874/redoc
 
-### Guias disponíveis:
+### Guias disponíveis
 
 - 🚀 [**SETUP_GUIDE.md**](./docs/SETUP_GUIDE.md) - Guia de instalação completo
 - 🔌 [**API_EXAMPLES.md**](./docs/API_EXAMPLES.md) - Exemplos práticos de uso da API
+- 🌐 [**HTTP_CLIENT_EXAMPLES.md**](./docs/HTTP_CLIENT_EXAMPLES.md) - Guia completo do HTTP Client
 - 🔄 [**GIT_WORKFLOW.md**](./docs/GIT_WORKFLOW.md) - Workflow Git e boas práticas
 - ✅ [**PRE_COMMIT_GUIDE.md**](./docs/PRE_COMMIT_GUIDE.md) - Configuração do pre-commit
 - 🤖 [**DEPENDABOT_GUIDE.md**](./docs/DEPENDABOT_GUIDE.md) - Configuração do Dependabot
+
+## HTTP Client
+
+🌐 **Cliente HTTP reutilizável para integração com APIs**
+
+O projeto inclui um cliente HTTP avançado (`PagBankHttpClient`) que facilita requisições:
+
+- ✅ **Métodos HTTP**: GET, POST, PUT, DELETE, HEAD
+- ✅ **Gerenciamento de Cookies**: Persistência automática entre requisições
+- ✅ **Base URL Configurável**: Default `https://pagbank.com.br`
+- ✅ **Headers Padrão**: User-Agent, Accept, Content-Type pré-configurados
+- ✅ **Timeout Configurável**: Default 30 segundos
+
+**Exemplo de uso:**
+
+```python
+from app.services.http_client import PagBankHttpClient
+
+# Inicializa o cliente
+client = PagBankHttpClient(base_url="https://api.pagbank.com.br")
+
+# Faz login (cookies são salvos automaticamente)
+response = await client.post(
+    path="/api/v1/login",
+    json={"username": "user@example.com"}
+)
+
+# Requisições seguintes reutilizam cookies automaticamente
+profile = await client.get("/api/v1/profile")
+```
+
+📖 **[Ver documentação completa do HTTP Client](./docs/HTTP_CLIENT_EXAMPLES.md)**
 
 ## Configuração
 

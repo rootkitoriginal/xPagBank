@@ -61,7 +61,7 @@ cd tests/
 ```
 
 **Pré-requisitos:**
-- Servidor deve estar rodando em `http://localhost:8000`
+- Servidor deve estar rodando em `http://localhost:8874`
 - Comando `curl` instalado
 - Python 3 com módulo `json.tool`
 

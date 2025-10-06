@@ -2,7 +2,7 @@
 
 ## Base URL
 ```
-http://localhost:8000/api/v1
+http://localhost:8874/api/v1
 ```
 
 ---
@@ -11,7 +11,7 @@ http://localhost:8000/api/v1
 
 ### cURL
 ```bash
-curl -X GET "http://localhost:8000/api/v1/health" \
+curl -X GET "http://localhost:8874/api/v1/health" \
   -H "accept: application/json"
 ```
 
@@ -19,7 +19,7 @@ curl -X GET "http://localhost:8000/api/v1/health" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/health"
+url = "http://localhost:8874/api/v1/health"
 response = requests.get(url)
 print(response.json())
 ```
@@ -28,7 +28,7 @@ print(response.json())
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/health';
+const url = 'http://localhost:8874/api/v1/health';
 
 fetch(url)
   .then(response => response.json())
@@ -42,7 +42,7 @@ fetch(url)
 
 ### cURL
 ```bash
-curl -X POST "http://localhost:8000/api/v1/usuario" \
+curl -X POST "http://localhost:8874/api/v1/usuario" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -58,7 +58,7 @@ curl -X POST "http://localhost:8000/api/v1/usuario" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/usuario"
+url = "http://localhost:8874/api/v1/usuario"
 headers = {
     "Content-Type": "application/json"
 }
@@ -78,7 +78,7 @@ print(response.json())
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/usuario';
+const url = 'http://localhost:8874/api/v1/usuario';
 const data = {
   nome: 'João Silva',
   email: 'joao.silva@email.com',
@@ -105,7 +105,7 @@ fetch(url, {
 
 ### cURL
 ```bash
-curl -X POST "http://localhost:8000/api/v1/acesso" \
+curl -X POST "http://localhost:8874/api/v1/acesso" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -118,7 +118,7 @@ curl -X POST "http://localhost:8000/api/v1/acesso" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/acesso"
+url = "http://localhost:8874/api/v1/acesso"
 data = {
     "email": "joao.silva@email.com",
     "senha": "senha123"
@@ -134,7 +134,7 @@ print(f"Token: {access_token}")
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/acesso';
+const url = 'http://localhost:8874/api/v1/acesso';
 const data = {
   email: 'joao.silva@email.com',
   senha: 'senha123'
@@ -160,7 +160,7 @@ fetch(url, {
 
 ### cURL
 ```bash
-curl -X POST "http://localhost:8000/api/v1/qrcode" \
+curl -X POST "http://localhost:8874/api/v1/qrcode" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -173,7 +173,7 @@ curl -X POST "http://localhost:8000/api/v1/qrcode" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/qrcode"
+url = "http://localhost:8874/api/v1/qrcode"
 data = {
     "valor": 150.50,
     "descricao": "Pagamento de produto X"
@@ -189,7 +189,7 @@ print(f"QR Code Data: {result['qrcode_data']}")
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/qrcode';
+const url = 'http://localhost:8874/api/v1/qrcode';
 const data = {
   valor: 150.50,
   descricao: 'Pagamento de produto X'
@@ -216,7 +216,7 @@ fetch(url, {
 
 ### cURL
 ```bash
-curl -X POST "http://localhost:8000/api/v1/confirmaqrcode" \
+curl -X POST "http://localhost:8874/api/v1/confirmaqrcode" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -229,7 +229,7 @@ curl -X POST "http://localhost:8000/api/v1/confirmaqrcode" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/confirmaqrcode"
+url = "http://localhost:8874/api/v1/confirmaqrcode"
 data = {
     "qrcode_id": "abc123-def456-ghi789",
     "codigo_confirmacao": "CONF_abc123"
@@ -245,7 +245,7 @@ print(f"Mensagem: {result['mensagem']}")
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/confirmaqrcode';
+const url = 'http://localhost:8874/api/v1/confirmaqrcode';
 const data = {
   qrcode_id: 'abc123-def456-ghi789',
   codigo_confirmacao: 'CONF_abc123'
@@ -272,7 +272,7 @@ fetch(url, {
 
 ### cURL
 ```bash
-curl -X GET "http://localhost:8000/api/v1/saldo" \
+curl -X GET "http://localhost:8874/api/v1/saldo" \
   -H "accept: application/json" \
   -H "X-Usuario-Id: 1"
 ```
@@ -281,7 +281,7 @@ curl -X GET "http://localhost:8000/api/v1/saldo" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/saldo"
+url = "http://localhost:8874/api/v1/saldo"
 headers = {
     "X-Usuario-Id": "1"
 }
@@ -297,7 +297,7 @@ print(f"Saldo Total: R$ {result['saldo_total']}")
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/saldo';
+const url = 'http://localhost:8874/api/v1/saldo';
 
 fetch(url, {
   method: 'GET',
@@ -320,7 +320,7 @@ fetch(url, {
 
 ### cURL
 ```bash
-curl -X POST "http://localhost:8000/api/v1/pix" \
+curl -X POST "http://localhost:8874/api/v1/pix" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -334,7 +334,7 @@ curl -X POST "http://localhost:8000/api/v1/pix" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/pix"
+url = "http://localhost:8874/api/v1/pix"
 data = {
     "chave_destino": "maria.silva@email.com",
     "valor": 250.00,
@@ -352,7 +352,7 @@ print(f"Status: {result['status']}")
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/pix';
+const url = 'http://localhost:8874/api/v1/pix';
 const data = {
   chave_destino: 'maria.silva@email.com',
   valor: 250.00,
@@ -381,7 +381,7 @@ fetch(url, {
 
 ### cURL
 ```bash
-curl -X POST "http://localhost:8000/api/v1/confirma_pix" \
+curl -X POST "http://localhost:8874/api/v1/confirma_pix" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -394,7 +394,7 @@ curl -X POST "http://localhost:8000/api/v1/confirma_pix" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/confirma_pix"
+url = "http://localhost:8874/api/v1/confirma_pix"
 data = {
     "transacao_id": "abc123-def456-ghi789",
     "codigo_confirmacao": "CONF_abc123"
@@ -411,7 +411,7 @@ print(f"Status: {result['status']}")
 ```javascript
 const fetch = require('node-fetch');
 
-const url = 'http://localhost:8000/api/v1/confirma_pix';
+const url = 'http://localhost:8874/api/v1/confirma_pix';
 const data = {
   transacao_id: 'abc123-def456-ghi789',
   codigo_confirmacao: 'CONF_abc123'
@@ -441,7 +441,7 @@ fetch(url, {
 ```python
 import requests
 
-BASE_URL = "http://localhost:8000/api/v1"
+BASE_URL = "http://localhost:8874/api/v1"
 
 # 1. Criar usuário
 usuario_data = {
@@ -489,7 +489,7 @@ print(f"✓ PIX confirmado: {confirma['mensagem']}")
 ```javascript
 const fetch = require('node-fetch');
 
-const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = 'http://localhost:8874/api/v1';
 
 async function fluxoCompleto() {
   try {
@@ -559,7 +559,7 @@ fluxoCompleto();
 
 ## Notas
 
-- Substitua `localhost:8000` pela URL do seu servidor em produção
+- Substitua `localhost:8874` pela URL do seu servidor em produção
 - Todos os exemplos usam JSON como formato de dados
 - Headers podem ser adicionados conforme necessário
 - Para Node.js, você pode usar `axios` ao invés de `fetch` se preferir

@@ -99,8 +99,8 @@ cat docs/PRE_COMMIT_GUIDE.md
 
 Além desta documentação, você pode acessar a documentação interativa da API:
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: http://localhost:8874/docs
+- **ReDoc**: http://localhost:8874/redoc
 
 ## 🔗 Links Úteis
 

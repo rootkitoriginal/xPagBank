@@ -4,7 +4,7 @@
 
 ✅ **Projeto completamente configurado e funcional!**
 
-O servidor FastAPI está rodando em: **http://localhost:8000**
+O servidor FastAPI está rodando em: **http://localhost:8874**
 
 ## 📋 O que foi criado
 
@@ -87,7 +87,7 @@ python3 main.py
 ### Opção 2: Com Uvicorn
 
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8874
 ```
 
 ### Opção 3: Usando a Task do VS Code
@@ -100,9 +100,9 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 Após iniciar o servidor, acesse:
 
-- **Swagger UI (interativa)**: http://localhost:8000/docs
-- **ReDoc (documentação)**: http://localhost:8000/redoc
-- **Root endpoint**: http://localhost:8000/
+- **Swagger UI (interativa)**: http://localhost:8874/docs
+- **ReDoc (documentação)**: http://localhost:8874/redoc
+- **Root endpoint**: http://localhost:8874/
 
 ## 🧪 Testes
 
@@ -288,6 +288,6 @@ Este projeto está sob a licença MIT.
 
 **Status Atual**: ✅ Pronto para desenvolvimento
 
-**Servidor**: 🟢 Rodando em http://localhost:8000
+**Servidor**: 🟢 Rodando em http://localhost:8874
 
-**Documentação**: 📚 http://localhost:8000/docs
+**Documentação**: 📚 http://localhost:8874/docs

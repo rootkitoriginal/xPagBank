@@ -25,7 +25,7 @@ Cria um novo usuário no sistema com os dados fornecidos.
 
 **Exemplo cURL:**
 ```
-curl -X POST "http://localhost:8000/api/v1/usuario" \\
+curl -X POST "http://localhost:8874/api/v1/usuario" \\
   -H "Content-Type: application/json" \\
   -d '{"nome": "João Silva", "email": "joao.silva@email.com", \\
     "cpf": "12345678901", "telefone": "11987654321", "senha": "senha123"}'
@@ -35,7 +35,7 @@ curl -X POST "http://localhost:8000/api/v1/usuario" \\
 ```
 import requests
 response = requests.post(
-    "http://localhost:8000/api/v1/usuario",
+    "http://localhost:8874/api/v1/usuario",
     json={"nome": "João Silva", "email": "joao.silva@email.com",
           "cpf": "12345678901", "telefone": "11987654321", "senha": "senha123"}
 )
@@ -43,7 +43,7 @@ response = requests.post(
 
 **Exemplo Node.js:**
 ```
-fetch('http://localhost:8000/api/v1/usuario', {
+fetch('http://localhost:8874/api/v1/usuario', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({
