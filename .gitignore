@@ -4,3 +4,36 @@ __pycache__/
 *.pyd
 *.log
 .env
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application specific
+clientes/
+logs/

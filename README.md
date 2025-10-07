@@ -128,8 +128,8 @@ xPagBank/
 ## Roadmap
 
 ### Em Desenvolvimento
-- [ ] Adicionar arquivo LICENSE ao repositório (MIT)
-- [ ] Configurar pipeline de CI/CD com GitHub Actions (testes, lint, build)
+- [x] Adicionar arquivo LICENSE ao repositório (MIT)
+- [x] Configurar pipeline de CI/CD com GitHub Actions (testes, lint, build)
 - [ ] Canal WebSocket para streaming de status dos passos da automação
 - [ ] Melhorar tratamento de seletores dinâmicos com retry e backoff exponencial
 
@@ -152,6 +152,6 @@ Contribuições são bem-vindas! Por favor:
 
 ## Licença
 
-Este projeto será licenciado sob a licença MIT. O arquivo LICENSE será adicionado em breve.
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 Para mais detalhes sobre melhorias planejadas, consulte `.github/copilot-instructions.md`.
