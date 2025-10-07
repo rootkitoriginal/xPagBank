@@ -73,7 +73,7 @@ cd xPagBank
 ### Variáveis de Ambiente
 
 - `DISPLAY`: Display do X11 (padrão: :1)
-- `GEOMETRY`: Resolução da tela (padrão: 1920x1080)
+- `GEOMETRYTRY`: Resolução da tela (padrão: 1920x1080)
 
 ### Portas Expostas
 

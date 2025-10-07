@@ -25,15 +25,11 @@ RUN apt-get update && apt-get install -y \
 # Create app directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package*.json ./
+# Copy all files
+COPY . .
+
+# Install dependencies
 RUN npm install && npx playwright install chromium
-
-# Copy app source
-COPY server.js ./
-COPY app/ ./app/
-
-# Copy configuration files
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

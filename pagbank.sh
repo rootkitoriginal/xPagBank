@@ -2,7 +2,7 @@
 
 # Script para gerenciar o PagBank Server
 PROJECT_NAME="pagbank-server"
-IMAGE_NAME="xpagbank"
+IMAGE_NAME="xpagbank:latest"
 
 case "$1" in
     "start")
@@ -34,21 +34,21 @@ case "$1" in
         echo "📊 Status do PagBank Server:"
         docker ps | grep $PROJECT_NAME || echo "❌ Servidor não está rodando"
         ;;
-    "build")
-        echo "🔨 Construindo imagem do PagBank Server..."
-        docker build -t $IMAGE_NAME .
-        echo "✅ Imagem construída!"
+    "pull"|"build")
+        echo "� Baixando imagem do PagBank Server..."
+        docker pull $IMAGE_NAME
+        echo "✅ Imagem baixada!"
         ;;
     "rebuild")
-        echo "🔨 Reconstruindo e reiniciando PagBank Server..."
+        echo "� Baixando nova versão e reiniciando PagBank Server..."
         $0 stop 2>/dev/null || true
-        docker build -t $IMAGE_NAME .
+        docker pull $IMAGE_NAME
         $0 start
         ;;
     *)
         echo "🤖 PagBank Server Manager"
         echo ""
-        echo "Uso: $0 {start|stop|restart|logs|status|build|rebuild}"
+        echo "Uso: $0 {start|stop|restart|logs|status|pull|rebuild}"
         echo ""
         echo "Comandos:"
         echo "  start    - Inicia o servidor"
@@ -56,8 +56,8 @@ case "$1" in
         echo "  restart  - Reinicia o servidor"
         echo "  logs     - Mostra os logs do servidor"
         echo "  status   - Mostra o status do servidor"
-        echo "  build    - Constrói a imagem Docker"
-        echo "  rebuild  - Reconstrói e reinicia o servidor"
+        echo "  pull     - Baixa a imagem Docker mais recente"
+        echo "  rebuild  - Baixa nova versão e reinicia o servidor"
         echo ""
         echo "Acessos:"
         echo "  VNC Interface: http://localhost:8080"
