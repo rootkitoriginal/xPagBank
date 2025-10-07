@@ -4,6 +4,9 @@ FROM mcr.microsoft.com/playwright/python:v1.46.0-jammy
 RUN apt-get update && apt-get install -y --no-install-recommends \
     x11vnc xvfb fluxbox supervisor websockify wget novnc python3-netifaces \
     && rm -rf /var/lib/apt/lists/*
+
+# Copia requirements e instala dependências Python
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia app
