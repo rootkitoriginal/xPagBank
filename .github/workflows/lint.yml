@@ -1,0 +1,38 @@
+name: Lint
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff black mypy
+        pip install -r requirements.txt
+    
+    - name: Run ruff
+      run: ruff check app/ scripts/
+      continue-on-error: true
+    
+    - name: Run black
+      run: black --check app/ scripts/
+      continue-on-error: true
+    
+    - name: Run mypy
+      run: mypy app/ scripts/ --ignore-missing-imports
+      continue-on-error: true

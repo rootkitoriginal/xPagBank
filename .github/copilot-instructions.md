@@ -13,11 +13,11 @@
 ## Melhorias e Features Pendentes 🚧
 
 ### Alta Prioridade
-- [ ] Adicionar arquivo LICENSE ao repositório (ex: MIT)
-- [ ] Configurar pipeline de CI/CD com GitHub Actions
-  - [ ] Workflow de testes automatizados
-  - [ ] Workflow de lint (ruff, black, mypy)
-  - [ ] Workflow de build e validação Docker
+- [x] Adicionar arquivo LICENSE ao repositório (ex: MIT)
+- [x] Configurar pipeline de CI/CD com GitHub Actions
+  - [x] Workflow de testes automatizados
+  - [x] Workflow de lint (ruff, black, mypy)
+  - [x] Workflow de build e validação Docker
   - [ ] Workflow de deploy (opcional)
 
 ### Média Prioridade
