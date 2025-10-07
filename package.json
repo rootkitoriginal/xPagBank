@@ -1,0 +1,21 @@
+{
+  "name": "xpagbank",
+  "version": "1.0.0",
+  "description": "PagBank automation server with Playwright",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "docker:build": "docker build -t xpagbank .",
+    "docker:run": "docker run -p 8080:8080 -p 3001:3001 --name pagbank-server xpagbank",
+    "docker:stop": "docker stop pagbank-server && docker rm pagbank-server"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
