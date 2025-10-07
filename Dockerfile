@@ -1,6 +1,6 @@
 # Dockerfile
 # Usando a imagem Playwright base, mas adicionando os pacotes Linux necessários
-FROM mcr.microsoft.com/playwright/python:v1.44.0-jammy
+FROM mcr.microsoft.com/playwright/python:v1.55.0-jammy
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Etc/UTC"
 # 1. Instalação da Stack VNC/Supervisor/X11

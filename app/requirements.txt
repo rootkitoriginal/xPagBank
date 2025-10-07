@@ -1,5 +1,0 @@
-# app/requirements.txt
-fastapi
-uvicorn[standard]
-pydantic
-playwright
