@@ -1,11 +1,18 @@
 # PagBank Login Automation (FastAPI + Playwright + VNC opcional)
 
-Este projeto implementa:
-- API FastAPI para iniciar fluxo de login no PagBank
-- Automação Playwright com múltiplas estratégias de fallback
-- Salvamento de cookies + screenshot em `clientes/<username>`
-- Execução via Docker (com ou sem interface)
-- Suporte opcional a VNC/noVNC para visualizar e interagir com o navegador em modo headful
+Este projeto implementa uma solução completa para automação de login no PagBank:
+
+## Funcionalidades
+
+- ✅ **API REST FastAPI** - Endpoint `/login` para automação de login
+- ✅ **Automação Robusta** - Playwright com múltiplas estratégias de fallback para seletores
+- ✅ **Persistência** - Salvamento automático de cookies e screenshot em `clientes/<username>/`
+- ✅ **Docker Support** - Execução containerizada com ou sem interface gráfica
+- ✅ **VNC/noVNC** - Visualização e interação com o navegador em tempo real
+- ✅ **Script Cliente** - `inicia.py` para facilitar chamadas à API
+- ✅ **Health Check** - Endpoint `/health` para monitoramento
+- ✅ **Configurável** - Variáveis de ambiente para personalização
+- ✅ **Tratamento de Erros** - Captura e retorno de erros amigáveis
 
 ## Endpoints
 
@@ -89,20 +96,62 @@ python scripts/inicia.py <usuario> <senha> --host http://localhost:8000
 
 Copie `.env.example` para `.env` e ajuste se necessário.
 
+## Estrutura do Projeto
+
+```
+xPagBank/
+├── app/
+│   ├── api/              # Rotas da API
+│   ├── automation/       # Lógica de automação Playwright
+│   ├── core/            # Configurações centrais
+│   ├── models/          # Modelos Pydantic
+│   ├── services/        # Serviços (Playwright)
+│   └── utils/           # Utilitários (filesystem, etc)
+├── scripts/
+│   └── inicia.py        # Script cliente para chamar a API
+├── clientes/            # Diretório para cookies e screenshots
+├── .env.example         # Exemplo de variáveis de ambiente
+├── Dockerfile           # Container com VNC/noVNC
+├── docker-compose.yml   # Orquestração dos serviços
+└── requirements.txt     # Dependências Python
+```
+
 ## Segurança
 
-- Não comitar `.env` real
-- Armazenar cookies com cuidado
-- Possível adicionar criptografia se for produção
+- **Não comitar `.env` real** - Mantenha suas credenciais fora do controle de versão
+- **Armazenar cookies com cuidado** - Os cookies salvos podem conter tokens de sessão
+- **Ambiente de produção** - Considere adicionar criptografia para cookies
+- **VNC** - Altere a senha padrão do VNC (`VNC_PASSWORD` no `.env`)
+- **Validação** - A API valida entrada com Pydantic
+- **Rate limiting** - Planejado para evitar abuso
 
 ## Roadmap
 
-- [ ] Adicionar retries com backoff
+### Em Desenvolvimento
+- [ ] Adicionar arquivo LICENSE ao repositório (MIT)
+- [ ] Configurar pipeline de CI/CD com GitHub Actions (testes, lint, build)
+- [ ] Canal WebSocket para streaming de status dos passos da automação
+- [ ] Melhorar tratamento de seletores dinâmicos com retry e backoff exponencial
+
+### Planejado
+- [ ] Integração com @microsoft/playwright-mcp (bridge Node.js)
 - [ ] Logs estruturados (JSON)
-- [ ] WebSocket streaming de eventos
-- [ ] Suporte a múltiplos navegadores
-- [ ] Persistir sessão (context reuse)
+- [ ] Suporte a múltiplos navegadores (Firefox, WebKit)
+- [ ] Persistir sessão entre requests (context reuse)
+- [ ] Testes unitários e de integração
+- [ ] Métricas e observabilidade
+
+## Contribuindo
+
+Contribuições são bem-vindas! Por favor:
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
+4. Push para a branch (`git push origin feature/MinhaFeature`)
+5. Abra um Pull Request
 
 ## Licença
 
-Defina uma licença (ex: MIT).
+Este projeto será licenciado sob a licença MIT. O arquivo LICENSE será adicionado em breve.
+
+Para mais detalhes sobre melhorias planejadas, consulte `.github/copilot-instructions.md`.
