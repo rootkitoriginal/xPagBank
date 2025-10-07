@@ -41,7 +41,7 @@ class AcessoController:
 
             # PASSO 1: Acessa a página de login
             print("\nPASSO 1: Acessando página de login...")
-            await browser.goto("https://acesso.pagbank.com.br/")
+            await browser.goto("https://www.pagbank.com.br/")
             print("✅ Página carregada")
 
             # PASSO 2: Aguarda e preenche o campo de username
