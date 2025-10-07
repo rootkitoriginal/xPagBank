@@ -53,7 +53,7 @@ async function startPagBankServer() {
         const page = await browser.newPage();
         
         // Configurar viewport
-        await page.setViewportSize({ width: 800, height: 600 });
+        await page.setViewportSize({ width: 1220, height: 1080 });
 
         // Navegar para o PagBank
         console.log('Navigating to PagBank...');
