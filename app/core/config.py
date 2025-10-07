@@ -1,25 +1,35 @@
-from pydantic_settings import BaseSettings
+from __future__ import annotations
+
+import os
+from functools import lru_cache
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
-class Settings(BaseSettings):
-    """Application settings"""
+class Settings:
+    """Configurações centrais da aplicação carregadas via variáveis de ambiente."""
 
-    APP_NAME: str = "xPagBank API"
-    APP_VERSION: str = "1.0.0"
-    API_V1_PREFIX: str = "/api/v1"
-    DEBUG: bool = True
+    def __init__(self) -> None:
+        base_dir = Path(__file__).resolve().parent.parent
+        self.base_dir = base_dir
+        self.project_root = base_dir.parent
+        self.app_port: int = int(os.getenv("APP_PORT", "8000"))
+        self.headless_default: bool = (
+            os.getenv("HEADLESS_DEFAULT", "true").lower() == "true"
+        )
+        self.login_timeout_ms: int = int(os.getenv("LOGIN_TIMEOUT", "30000"))
+        self.vnc_password: str = os.getenv("VNC_PASSWORD", "vncpass")
+        self.clientes_dir: Path = (self.project_root / "clientes").resolve()
+        self.logs_dir: Path = (self.project_root / "logs").resolve()
+        self.assets_dir: Path = (self.project_root / "assets").resolve()
+        self.default_login_url: str = os.getenv(
+            "PAGBANK_LOGIN_URL", "https://www.pagbank.com.br"
+        )
 
-    # Database
-    DATABASE_URL: str = "sqlite:///./xpagbank.db"
 
-    # Security
-    SECRET_KEY: str = "your-secret-key-change-in-production"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
-
-
-settings = Settings()
+@lru_cache(maxsize=1)
+def get_settings() -> Settings:
+    return Settings()
