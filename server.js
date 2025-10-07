@@ -64,8 +64,8 @@ async function startPagBankServer() {
 
         // Aguardar página carregar e aceitar cookies se necessário
         try {
-            await page.waitForSelector('button:has-text("OK")', { timeout: 5000 });
-            await page.click('button:has-text("OK")');
+            await page.waitForSelector('button:has-text("Entrar")', { timeout: 1000 });
+            await page.click('button:has-text("Entrar")');
             console.log('Cookies accepted');
         } catch (error) {
             console.log('No cookie banner found');
@@ -73,84 +73,74 @@ async function startPagBankServer() {
 
         // Clicar no botão Entrar
         console.log('Clicking Entrar button...');
-        await page.click('a[href*="acesso.pagbank.com.br"]');
-        
-        // Aguardar página de login carregar
-        await page.waitForSelector('input[name="login"], input[placeholder*="CPF"]', { timeout: 10000 });
-        
-        // Preencher CPF
-        console.log('Filling CPF...');
-        const cpfField = await page.locator('input[name="login"], input[placeholder*="CPF"], textbox:has-text("CPF")').first();
-        await cpfField.fill('01796604119');
-        
-        // Clicar em Continuar
-        console.log('Clicking Continuar...');
-        await page.click('button:has-text("Continuar")');
-        
-        // Aguardar campos de senha aparecerem
-        await page.waitForSelector('input[name="password1"], input[aria-label*="Campo 1"]', { timeout: 10000 });
-        
-        // Preencher senha (6 dígitos: 130988)
-        console.log('Filling password...');
-        const password = '130988';
-        for (let i = 0; i < 6; i++) {
-            const fieldSelector = `input[aria-label*="Campo ${i + 1}"], input[name="password${i + 1}"]`;
-            await page.locator(fieldSelector).first().fill(password[i]);
+        try {
+            // Tentar diferentes seletores para o botão Entrar
+            await Promise.race([
+                page.waitForSelector('a[href*="acesso.pagbank.com.br"]', { timeout: 5000 }),
+                page.waitForSelector('text=Entrar', { timeout: 5000 }),
+                page.waitForSelector('[data-testid="login"]', { timeout: 3000 })
+            ]);
+            
+            await page.click('a[href*="acesso.pagbank.com.br"], text=Entrar, [data-testid="login"]');
+            await page.waitForLoadState('networkidle', { timeout: 15000 });
+        } catch (error) {
+            console.log('Failed to find login button, trying to navigate directly...');
+            await page.goto('https://acesso.pagbank.com.br', { timeout: 4000 });
         }
         
-        // Clicar no botão Entrar
-        console.log('Clicking final Entrar button...');
-        await page.click('button:has-text("Entrar")');
         
-        // Aguardar login processar
-        await page.waitForTimeout(3000);
-        
-        // Verificar se login foi bem sucedido
-        const currentUrl = page.url();
-        if (currentUrl.includes('acesso.pagbank.com.br') && await page.locator('text=incorreta').count() > 0) {
-            console.log('Login failed: Invalid credentials');
-            // Continuará mesmo com erro para manter a sessão ativa
-        } else {
-            console.log('Login attempt completed');
-        }
-
-        
-
-        console.log('PagBank loaded successfully!');
-        console.log('Session is now active and ready for external connections.');
-        
-        // Manter a sessão ativa
-        console.log('Keeping session alive...');
-        
-        // Configurar handler para manter a página ativa
-        setInterval(async () => {
-            try {
-                // Verificar se a página ainda está ativa
-                await page.evaluate(() => {
-                    console.log('Session heartbeat:', new Date().toISOString());
-                });
-            } catch (error) {
-                console.log('Page became inactive, attempting to reload...');
+        // Preencher CPF/CNPJ/Email
+        console.log('Filling login credentials...');
+        try {
+            // Aguardar especificamente pelo campo de CPF
+            console.log('Waiting for CPF field...');
+            await page.waitForSelector('input, [role="textbox"]', { timeout: 15000 });
+            
+            // Usar seletor mais robusto
+            const cpfField = page.getByRole('textbox', { name: 'CPF, CNPJ ou E-mail' });
+            await cpfField.waitFor({ timeout: 10000 });
+            await cpfField.fill('01796604119');
+            console.log('CPF filled successfully');
+            
+            // Aguardar a página processar e ir para tela de senha
+            console.log('Waiting for password screen...');
+            await page.waitForSelector('[role="textbox"]:has-text("Campo 1"), input[name*="Campo"], input[aria-label*="Campo"]', { timeout: 15000 });
+            
+            // Preencher senha (6 dígitos: 130988)
+            console.log('Filling password fields...');
+            const password = '130988';
+            for (let i = 0; i < 6; i++) {
+                const fieldNumber = i + 1;
                 try {
-                    await page.reload();
-                } catch (reloadError) {
-                    console.error('Failed to reload page:', reloadError);
+                    await page.getByRole('textbox', { name: `Campo ${fieldNumber}` }).fill(password[i]);
+                    console.log(`Password field ${fieldNumber} filled with: ${password[i]}`);
+                } catch (error) {
+                    console.log(`Error filling password field ${fieldNumber}:`, error.message);
                 }
             }
-        }, 60000); // Check every minute
-
-        // Handler para graceful shutdown
-        process.on('SIGINT', async () => {
-            console.log('Shutting down gracefully...');
-            await browser.close();
-            process.exit(0);
-        });
-
-        process.on('SIGTERM', async () => {
-            console.log('Shutting down gracefully...');
-            await browser.close();
-            process.exit(0);
-        });
+            
+            // Clicar no botão Entrar
+            console.log('Clicking final Entrar button...');
+            await page.getByRole('button', { name: 'Entrar' }).click();
+            
+            // Aguardar resultado do login
+            await page.waitForTimeout(5000);
+            
+            // Verificar se login foi processado
+            const currentUrl = page.url();
+            console.log('Current URL after login attempt:', currentUrl);
+            
+            if (await page.locator('text=incorreta').count() > 0) {
+                console.log('Login failed: Invalid credentials detected');
+            } else if (currentUrl !== 'https://acesso.pagbank.com.br/') {
+                console.log('Login may have succeeded - URL changed');
+            } else {
+                console.log('Login status unclear - staying on login page');
+            }
+            
+        } catch (error) {
+            console.log('Error during login process:', error.message);
+        }
 
         // Manter o processo rodando
         await new Promise(() => {}); // Infinite promise
